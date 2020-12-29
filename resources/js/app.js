@@ -5,8 +5,12 @@
  */
 
 require('./bootstrap');
-
 window.Vue = require('vue');
+var moment = require('moment');
+import { DateTime } from "luxon";
+const Swal = require('sweetalert2')
+import swal from 'sweetalert2'
+      window.swal = swal;
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,6 +24,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('quiz-component', require('./components/QuizComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

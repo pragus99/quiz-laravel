@@ -22,5 +22,11 @@
         "sass-loader": "^8.0.0",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "eslint": "^7.16.0",
+        "luxon": "^1.25.0",
+        "moment": "^2.29.1",
+        "sweetalert2": "^10.10.4"
     }
 }

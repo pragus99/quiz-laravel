@@ -1,0 +1,18 @@
+@extends('layouts.app')
+
+@section('content')
+    <quiz-component
+        :times ="{{ $quiz->minutes }}"
+        :quizid = "{{ $quiz->id }}"
+        :quiz-questions = "{{ $quizQuestions }}"
+        :has-quiz-played = "{{ $userResult }}"
+        >
+    </quiz-component>
+
+<script type="text/javascript">
+    window.oncontextmenu = function () {
+        console.log("Right Click Disabled");
+        return false;
+    }
+</script>
+@endsection
