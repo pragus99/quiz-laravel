@@ -33,7 +33,7 @@
                             <td>{{ $attemptedQuestion }}</td>
                             <td>{{ $userCorrectedAnswer }}</td>
                             <td>{{ $userWrongAnswer }}</td>
-                            <td>{{ round($percentag,2) }}</td>
+                            <td>{{ round($percentage,2) }}</td>
                         </tr>
                         @endforeach
                     </tbody>

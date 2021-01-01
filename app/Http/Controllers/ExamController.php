@@ -40,39 +40,38 @@ class ExamController extends Controller
         $userId = $request->get('user_id');
         $quizId = $request->get('quiz_id');
         $quiz = Quiz::find($quizId);
-        $result = Result::where('quiz_id', $quizId)->where('user_id', $userId)->exists();
-        if ($result) {
-            return redirect()->back()->with('success', 'The user still in the quiz');
-        } else {
+        // $result = Result::where('quiz_id', $quizId)->where('user_id', $userId)->exists();
+        // if ($result) {
+        //     return redirect()->back()->with('success', 'The user still in the quiz');
+        // } else {
             $quiz->users()->detach($userId);
             return redirect()->back()->with('success', 'The user successfully unassigned from Exam');
-        }
+        // }
     }
 
     public function quizQuestions(Request $request, $quizId)
     {
-        $user = auth()->user()->id;
+        $user=auth()->user()->id;
 
-        //check if user has been assigned a quiz
-        $userId = DB::table('quiz_user')->where('user_id', $user)->pluck(
-            'quiz_id'
-        )->toArray();
-        if (!in_array($quizId, $userId)) {
-            return redirect()->to('/home')->with('success', 'You are not assigned this exam');
+        //check if user has been assigned a particular quiz
+        $userId = DB::table('quiz_user')->where('user_id',$user)->pluck('quiz_id')->toArray();
+        if(!in_array($quizId, $userId)){
+            return redirect()->to('/home')->with('error','You are not assigned this exam');
         }
 
         $quiz = Quiz::find($quizId);
-        $time = Quiz::where('id', $quizId)->value('minutes');
-        $quizQuestions = Question::where('quiz_id', $quizId)->with('answers')->get();
-        $userResult = Result::where(['user_id' => $user, 'quiz_id' => $quizId])->get();
+        $time = Quiz::where('id',$quizId)->value('minutes');
+        $quizQuestions = Question::where('quiz_id',$quizId)->with('answers')->get();
+        $userResult = Result::where(['user_id'=>$user,'quiz_id'=>$quizId])->get();
 
-        //has user played quiz
-        $wasCompleted = Result::where('user_id', $user)->whereIn('quiz_id', (new Quiz)->hasQuizAttempted())->pluck('quiz_id')->toArray();
-        if (in_array($quizId, $wasCompleted)) {
-            return redirect()->to('/home')->with('success', 'You already participated in this exam');
+        //has user played particular quiz
+        $wasCompleted = Result::where('user_id',$user)->whereIn('quiz_id',(new Quiz)->hasQuizAttempted())->pluck('quiz_id')->toArray();
+
+        if(in_array($quizId,$wasCompleted)){
+            return redirect()->to('/home')->with('error','You already participated in this exam');
         }
 
-        return view('quiz', compact('quiz', 'time', 'quizQuestions', 'userResult'));
+        return view('quiz',compact('quiz','time','quizQuestions','userResult'));
     }
 
     public function postQuiz(Request $request)
@@ -90,33 +89,33 @@ class ExamController extends Controller
 
     public function viewResult($userId, $quizId)
     {
-        $result = Result::where('user_id', $userId)->where('quiz_id', $quizId)->get();
+        $results = Result::where('user_id', $userId)->where('quiz_id', $quizId)->get();
         return view('result-detail', compact('results'));
     }
     public function result()
     {
-        return view('backend.exam.index', [
+        return view('backend.result.index', [
             'quizzes' => Quiz::get(),
         ]);
     }
     public function userQuizResult($userId, $quizId)
     {
-        $result = Result::where('user_id', $userId)->where('quiz_id', $quizId)->get();
-        $totalQuestion = Question::where('quiz_id', $quizId)->count();
-        $attemptQuestion = Result::where('quiz_id', $quizId)->where('user_id', $userId)->count();
+        $results = Result::where('user_id', $userId)->where('quiz_id', $quizId)->get();
+        $totalQuestions = Question::where('quiz_id', $quizId)->count();
+        $attemptedQuestion = Result::where('quiz_id', $quizId)->where('user_id', $userId)->count();
         $quiz = Quiz::where('id', $quizId)->get();
         $ans = [];
-        foreach ($result as $answer) {
+        foreach ($results as $answer) {
             array_push($ans, $answer->answer_id);
         }
         $userCorrectedAnswer = Answer::whereIn('id', $ans)->where('is_correct', 1)->count();
-        $userWrongAnswer = $totalQuestion - $userCorrectedAnswer;
-        if ($attemptQuestion) {
-            $percentage = ($userCorrectedAnswer / $totalQuestion) * 100;
+        $userWrongAnswer = $totalQuestions - $userCorrectedAnswer;
+        if ($attemptedQuestion) {
+            $percentage = ($userCorrectedAnswer / $totalQuestions) * 100;
         } else {
             $percentage=0;
         }
-        $percentage = ($userCorrectedAnswer / $totalQuestion) * 100;
+        
         return view('backend.result.result', compact('results', 'totalQuestions', 'attemptedQuestion', 'userCorrectedAnswer', 'userWrongAnswer', 'percentage', 'quiz'));
     }
 }
