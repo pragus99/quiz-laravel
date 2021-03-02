@@ -4,3 +4,5 @@ An online quiz or online examination is a web application that allows the admin 
 Admin can categorize the questions by creating the category for the questions. This helps the admin to list all the questions for a particular category whenever necessary. 
 Admin can create the users. Admin can assign the exam to his/her staff/interns/students for a particular category such as programming quiz, aptitude test, and so on. 
 Each student/employee/intern who has been assigned a quiz can attempt the quiz and the result will be available to the candidate and admin can also view the result of the candidate in his/her dashboard.
+
+Website : http://quiz-lavel.herokuapp.com/
