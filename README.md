@@ -1,4 +1,4 @@
-# About quiz-app
+# Quiz-app
 
 An online quiz or online examination is a web application that allows the admin to set the questions with a maximum of four options along with the correct answer. 
 Admin can categorize the questions by creating the category for the questions. This helps the admin to list all the questions for a particular category whenever necessary. 
