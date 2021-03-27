@@ -6,6 +6,7 @@ Admin can create the users. Admin can assign the exam to his/her staff/interns/s
 Each student/employee/intern who has been assigned a quiz can attempt the quiz and the result will be available to the candidate and admin can also view the result of the candidate in his/her dashboard.
 
 # Usage
+```
 # Install Dependencies
 composer install
 npm install
@@ -25,6 +26,7 @@ php artisan migrate
 
 # Seed the database for admin account
 php artisan db:seed
+```
 
 # Website 
 
